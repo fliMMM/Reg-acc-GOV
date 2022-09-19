@@ -31,7 +31,6 @@ namespace auto1
             //AutoControl.MouseClick(200, 300);
 
             var hWnd = AutoControl.FindWindowHandle(null, "LDPlayer");
-            var child = AutoControl.FindWindowExFromParent(hWnd, null, "RenderWindow");
             AutoControl.BringToFront(hWnd);
 
             //var openGamePoint = AutoControl.GetGlobalPoint(hWnd,225, 100);
@@ -40,20 +39,21 @@ namespace auto1
             var usernamePoint = AutoControl.GetGlobalPoint(hWnd, 180, 130);
             var passwordPoint = AutoControl.GetGlobalPoint(hWnd, 180, 160);
             var emailPoint = AutoControl.GetGlobalPoint(hWnd, 180, 190);
+            var registerAfterPoint = AutoControl.GetGlobalPoint(hWnd, 180, 270);
             var backPoint = AutoControl.GetGlobalPoint(hWnd, 450, 160);
-           
-            for(int i = 3; i <= 4; i++)
-            {
+
+
+            for(int i = 36; i <= 38; i++){
                 //AutoControl.MouseClick(openGamePoint, EMouseKey.LEFT);
                 AutoControl.MouseClick(loginPoint, EMouseKey.LEFT);
-                Thread.Sleep(5000);
+                Thread.Sleep(4000);
                 AutoControl.MouseClick(registerPoint, EMouseKey.LEFT);
                 Thread.Sleep(1000);
 
                 //send username
                 AutoControl.MouseClick(usernamePoint, EMouseKey.LEFT);
                 Thread.Sleep(1000);
-                SendKeys.SendWait("100tr1ngay15" + i.ToString());
+                SendKeys.SendWait("100tr1ngay18" + i.ToString());
 
                 //send password
                 AutoControl.MouseClick(passwordPoint, EMouseKey.LEFT);
@@ -63,7 +63,27 @@ namespace auto1
                 //send email
                 AutoControl.MouseClick(emailPoint, EMouseKey.LEFT);
                 Thread.Sleep(1000);
-                SendKeys.SendWait("kjsadasdasdasd34hf" + i.ToString() + "@gmail.com");
+                SendKeys.SendWait("kjsadas8dasuudasd34hyyf" + i.ToString() +  "@gmail.com");
+
+                Thread.Sleep(500);
+                AutoControl.SendKeyFocus(KeyCode.DOWN);
+                Thread.Sleep(500);
+                AutoControl.SendKeyFocus(KeyCode.DOWN);
+                Thread.Sleep(500);
+                AutoControl.SendKeyFocus(KeyCode.DOWN);
+                Thread.Sleep(500);
+                AutoControl.SendKeyFocus(KeyCode.DOWN);
+                Thread.Sleep(500);
+                AutoControl.SendKeyFocus(KeyCode.DOWN);
+                Thread.Sleep(500);
+                AutoControl.SendKeyFocus(KeyCode.DOWN);
+                Thread.Sleep(500);
+                AutoControl.SendKeyFocus(KeyCode.DOWN);
+                Thread.Sleep(500);
+                AutoControl.SendKeyFocus(KeyCode.DOWN);
+
+                Thread.Sleep(1000);
+                //AutoControl.MouseClick(registerAfterPoint, EMouseKey.LEFT);
 
                 //dangki
 
@@ -72,8 +92,9 @@ namespace auto1
 
                 Thread.Sleep(1000);
                 AutoControl.MouseClick(backPoint, EMouseKey.LEFT);
-                Thread.Sleep(2000);
+                Thread.Sleep(3000);
             }
+
 
         }
 
