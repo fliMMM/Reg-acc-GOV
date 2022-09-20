@@ -25,75 +25,102 @@ namespace auto1
         public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
         [DllImport("User32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int uMsg, int wParam, string lParam);
+
+        void click_to(Point point, int delay)
+        {
+            AutoControl.MouseClick(point, EMouseKey.LEFT);
+            Thread.Sleep(delay);
+        }
+
+        void write_to(string text)
+        {
+            Thread.Sleep(1000);
+            SendKeys.SendWait(text);
+        }
+
+        void down_to()
+        {
+            Thread.Sleep(500);
+            AutoControl.SendKeyFocus(KeyCode.DOWN);
+        }
+
+        void turn_on_async(IntPtr HWND)
+        {
+            var _threeDotPoint = AutoControl.GetGlobalPoint(HWND, 450, 55);
+            var _displayAsyncPoint = AutoControl.GetGlobalPoint(HWND, 350, 70);
+            var _selectAllPoint = AutoControl.GetGlobalPoint(HWND, 40, 430);
+            var _startPoint = AutoControl.GetGlobalPoint(HWND, 50, 80);
+            var _loginNowPoint = AutoControl.GetGlobalPoint(HWND, 180, 210);
+
+            click_to(_threeDotPoint, 500);
+            click_to(_displayAsyncPoint, 500);
+            click_to(_selectAllPoint, 500);
+            click_to(_startPoint, 500);
+            click_to(_loginNowPoint, 500);
+        }
+
+        void play_record(IntPtr HWND, int timePerGame)
+        {
+            var _threeDotPoint = AutoControl.GetGlobalPoint(HWND, 450, 55);
+            var displayRecordPoint = AutoControl.GetGlobalPoint(HWND, 300, 50);
+            var playRecordPoint = AutoControl.GetGlobalPoint(HWND, 450, 180);
+            var exitRecordPoint = AutoControl.GetGlobalPoint(HWND, 515, 85);
+            var _stopPoint = AutoControl.GetGlobalPoint(HWND, 330, 20);
+
+            click_to(_threeDotPoint, 1000);
+            click_to(displayRecordPoint, 1000);
+            click_to(playRecordPoint,1000);
+            click_to(exitRecordPoint, 1000);
+
+            Thread.Sleep(timePerGame);
+            click_to(_stopPoint, 700);
+        }
+
+        void turn_off_async(IntPtr HWND)
+        {
+            var _stopPoint = AutoControl.GetGlobalPoint(HWND, 330, 20);
+            var _exitPoint = AutoControl.GetGlobalPoint(HWND, 515, 40);
+            click_to(_stopPoint, 500);
+            click_to(_exitPoint, 500);
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            //Process.Start("C:\\LDPlayer\\LDPlayer9\\dnplayer.exe");
-            //AutoControl.MouseClick(200, 300);
-
             var hWnd = AutoControl.FindWindowHandle(null, "LDPlayer");
-            //var child = AutoControl.FindHandle(hWnd, "RenderWindow", null);
-            //AutoControl.BringToFront(hWnd);
 
             //var openGamePoint = AutoControl.GetGlobalPoint(hWnd,225, 100);
             var loginPoint = AutoControl.GetGlobalPoint(hWnd, 180, 230);
             var registerPoint = AutoControl.GetGlobalPoint(hWnd, 180, 250);
             var usernamePoint = AutoControl.GetGlobalPoint(hWnd, 180, 130);
-            //var usernamePoint = AutoControl.GetGlobalPoint(child, 180, 90);
-            var passwordPoint = AutoControl.GetGlobalPoint(hWnd, 180, 160);
+            var passwordPoint = AutoControl.GetGlobalPoint(hWnd, 180, 170);
             var emailPoint = AutoControl.GetGlobalPoint(hWnd, 180, 190);
-            var registerAfterPoint = AutoControl.GetGlobalPoint(hWnd, 180, 270);
             var backPoint = AutoControl.GetGlobalPoint(hWnd, 450, 160);
 
-
-  
-            AutoControl.MouseClick(loginPoint, EMouseKey.LEFT);
-            Thread.Sleep(7000);
-            AutoControl.MouseClick(registerPoint, EMouseKey.LEFT);
-            Thread.Sleep(1000);
+            click_to(loginPoint, 5000);
+            click_to(registerPoint, 1000);
 
             //send username
-            AutoControl.MouseClick(usernamePoint, EMouseKey.LEFT);
-            Thread.Sleep(1000);
-            SendKeys.SendWait("100tr1ngay18990");
+            click_to(usernamePoint, 0);
+            write_to("pro032132");
 
             //send password
-            AutoControl.MouseClick(passwordPoint, EMouseKey.LEFT);
-            Thread.Sleep(2000);
-            SendKeys.SendWait("Aa@100tr");
+            click_to(passwordPoint, 0);
+            write_to("pro032132112");
 
             //send email
-            AutoControl.MouseClick(emailPoint, EMouseKey.LEFT);
-            Thread.Sleep(1000);
-            SendKeys.SendWait("kjsadas8d0asuudasd34hyyfh@gmail.com");
+            click_to(emailPoint, 0);
+            write_to("b4hbhweiu@gmail.com");
 
-            Thread.Sleep(500);
-            AutoControl.SendKeyFocus(KeyCode.DOWN);
-            Thread.Sleep(500);
-            AutoControl.SendKeyFocus(KeyCode.DOWN);
-            Thread.Sleep(500);
-            AutoControl.SendKeyFocus(KeyCode.DOWN);
-            Thread.Sleep(500);
-            AutoControl.SendKeyFocus(KeyCode.DOWN);
-            Thread.Sleep(500);
-            AutoControl.SendKeyFocus(KeyCode.DOWN);
-            Thread.Sleep(500);
-            AutoControl.SendKeyFocus(KeyCode.DOWN);
-            Thread.Sleep(500);
-            AutoControl.SendKeyFocus(KeyCode.DOWN);
-            Thread.Sleep(500);
-            AutoControl.SendKeyFocus(KeyCode.DOWN);
+            for(int i = 0; i < 8; i++)
+            {
+                down_to();
+            }
 
+
+            write_to("{ENTER}");
             Thread.Sleep(1000);
 
-
-            SendKeys.SendWait("{ENTER}");
-
-            Thread.Sleep(1000);
-            AutoControl.MouseClick(backPoint, EMouseKey.LEFT);
+            click_to(backPoint, 0);
             Thread.Sleep(3000);
-            //}
-
-
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -101,8 +128,8 @@ namespace auto1
             //read file
             string[] lines = System.IO.File.ReadAllLines(@"C:\Users\20010844\Desktop\data.txt");
             int inDexOfFile = 0;
-            IntPtr[] HWND = new IntPtr[2];
-            string[] screens = { "LDPlayer", "LDPlayer-1" };
+            IntPtr[] HWND = new IntPtr[1];
+            string[] screens = { "LDPlayer" };
             IntPtr _hWnd = IntPtr.Zero;
             for (int i = 0; i < screens.Length; i++)
             {
@@ -111,70 +138,39 @@ namespace auto1
             }
             for(int j = 0; j <1; j++)
             {
+                
                 for (int i = 0; i < HWND.Length; i++)
                 {
-                    //var hWnd = AutoControl.FindWindowHandle(null, "LDPlayer");
+                    if (inDexOfFile == lines.Length) continue;
                     var loginPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 230);
                     var usernamePoint = AutoControl.GetGlobalPoint(HWND[i], 180, 130);
                     var passwordPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 160);
-                    var loginNowPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 210);
-                    var threeDotPoint = AutoControl.GetGlobalPoint(HWND[i], 450, 55);
-                    var displayRecordPoint = AutoControl.GetGlobalPoint(HWND[i], 300, 50);
-                    var playRecordPoint = AutoControl.GetGlobalPoint(HWND[i], 450, 180);
-                    var exitRecordPoint = AutoControl.GetGlobalPoint(HWND[i], 515, 85);
-                    var championPickPoint = AutoControl.GetGlobalPoint(HWND[i], 450, 200);
 
+                    click_to(loginPoint, 5000);
 
-                    AutoControl.MouseClick(loginPoint, EMouseKey.LEFT);
-                    Thread.Sleep(5000);
-
-                    AutoControl.MouseClick(usernamePoint, EMouseKey.LEFT);
-                    Thread.Sleep(500);
-                    SendKeys.SendWait(lines[inDexOfFile].Split('|')[0]);
+                    //SendMessage username
+                    click_to(usernamePoint, 1000);
+                    write_to(lines[inDexOfFile].Split('|')[0].ToString().Trim());
 
 
                     //send password
-                    AutoControl.MouseClick(passwordPoint, EMouseKey.LEFT);
-                    Thread.Sleep(500);
-                    SendKeys.SendWait(lines[inDexOfFile].Split('|')[1]);
+                    click_to(passwordPoint, 1000);
+                    write_to(lines[inDexOfFile].Split('|')[1].ToString().Trim());
 
-
-                    //AutoControl.MouseClick(loginNowPoint, EMouseKey.LEFT);
-                    //Thread.Sleep(500);
-
-
-
-                    //Play record
-                    //AutoControl.MouseClick(threeDotPoint, EMouseKey.LEFT);
-                    //Thread.Sleep(2000);
-                    //AutoControl.MouseClick(displayRecordPoint, EMouseKey.LEFT);
-                    //Thread.Sleep(2000);
-
-                    //AutoControl.MouseClick(playRecordPoint, EMouseKey.LEFT);
-                    //Thread.Sleep(2000);
-
-                    //AutoControl.MouseClick(exitRecordPoint, EMouseKey.LEFT);
-                    //Thread.Sleep(2000);
                     inDexOfFile++;
                 }
 
                 //turnOn async
-                var _threeDotPoint = AutoControl.GetGlobalPoint(HWND[0], 450, 55);
-                var _displayAsyncPoint = AutoControl.GetGlobalPoint(HWND[0], 350, 70);
-                var _selectAllPoint = AutoControl.GetGlobalPoint(HWND[0], 40, 430);
-                var _startPoint = AutoControl.GetGlobalPoint(HWND[0], 50, 80);
-                var _loginNowPoint = AutoControl.GetGlobalPoint(HWND[0], 180, 210);
-                
-                AutoControl.MouseClick(_threeDotPoint, EMouseKey.LEFT);
                 Thread.Sleep(1000);
-                AutoControl.MouseClick(_displayAsyncPoint, EMouseKey.LEFT);
-                Thread.Sleep(1000);
-                AutoControl.MouseClick(_selectAllPoint, EMouseKey.LEFT);
-                Thread.Sleep(1000);
-                AutoControl.MouseClick(_startPoint, EMouseKey.LEFT);
+                turn_on_async(HWND[0]);
 
-                AutoControl.MouseClick(_loginNowPoint, EMouseKey.LEFT);
-                Thread.Sleep(500);
+
+                //Play record
+                Thread.Sleep(1000);
+                play_record(HWND[0], 10000);
+
+                //turnoff async
+                turn_off_async(HWND[0]);
             }
         }
     }
