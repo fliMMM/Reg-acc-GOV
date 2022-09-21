@@ -137,87 +137,94 @@ namespace auto1
             
         }
 
+        void pick_ad(IntPtr[] HWND)
+        {
+            var subBitmap = ImageScanOpenCV.GetImage("ad.PNG");
+            int countX = 0;
+            int countY = 0;
+
+            for (int i = 0; i < HWND.Length; i++)
+            {
+
+                var screen = (Bitmap)CaptureHelper.CaptureWindow(HWND[i]);
+
+                screen = CaptureHelper.CropImage(screen, new System.Drawing.Rectangle(40, 83, 58, 140));
+                screen.Save("linhtinh.PNG");
+
+                var resPoint1 = ImageScanOpenCV.FindOutPoint(screen, subBitmap);
+                Point point = new Point();
+                if (resPoint1 != null)
+                {
+                    point.X = resPoint1.Value.X + countX + 40;
+                    point.Y = resPoint1.Value.Y + 83;
+                    click_to(point, 400);
+
+                }
+                countX += 490;
+                if (i % 4 == 3) 
+                {
+                    countX = 0;
+                    countY += 287;
+                }
+                
+
+                Thread.Sleep(500);
+            }
+        }
+
         private void button2_Click(object sender, EventArgs e)
         {
             //read file
             string[] lines = System.IO.File.ReadAllLines(@"C:\Users\20010844\Desktop\login.txt");
             int inDexOfFile = 0;
-            IntPtr[] HWND = new IntPtr[1];
-            string[] screens = { "LDPlayer" };
+            IntPtr[] HWND = new IntPtr[2];
+            string[] screens = { "play1", "play2" };
             IntPtr _hWnd = IntPtr.Zero;
             for (int i = 0; i < screens.Length; i++)
             {
                 _hWnd = AutoControl.FindWindowHandle(null, screens[i]);
                 HWND[i] = _hWnd;
             }
-            for(int j = 0; j <1; j++)
-            {
-                
-                for (int i = 0; i < HWND.Length; i++)
-                {
-                    if (inDexOfFile == lines.Length) continue;
-                    var loginPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 230);
-                    var usernamePoint = AutoControl.GetGlobalPoint(HWND[i], 180, 130);
-                    var passwordPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 160);
+            //for(int j = 0; j <1; j++)
+            //{
 
-                    click_to(loginPoint, 5000);
+            //    for (int i = 0; i < HWND.Length; i++)
+            //    {
+            //        if (inDexOfFile == lines.Length) continue;
+            //        var loginPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 230);
+            //        var usernamePoint = AutoControl.GetGlobalPoint(HWND[i], 180, 130);
+            //        var passwordPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 160);
 
-                    //SendMessage username
-                    click_to(usernamePoint, 1000);
-                    write_to(lines[inDexOfFile].Split('|')[0].ToString().Trim());
-                    Thread.Sleep(500);
+            //        click_to(loginPoint, 5000);
 
-
-                    //send password
-                    click_to(passwordPoint, 1000);
-                    write_to(lines[inDexOfFile].Split('|')[1].ToString().Trim());
-                    Thread.Sleep(500);
-
-                    inDexOfFile++;
-                }
-
-                //turnOn async
-                Thread.Sleep(1000);
-                turn_on_async(HWND[0]);
+            //        //SendMessage username
+            //        click_to(usernamePoint, 1000);
+            //        write_to(lines[inDexOfFile].Split('|')[0].ToString().Trim());
+            //        Thread.Sleep(500);
 
 
-                //Play record
-                Thread.Sleep(1000);
-                play_record(HWND[0], 10000);
+            //        //send password
+            //        click_to(passwordPoint, 1000);
+            //        write_to(lines[inDexOfFile].Split('|')[1].ToString().Trim());
+            //        Thread.Sleep(500);
 
-                //turnoff async
-                turn_off_async(HWND[0]);
-            }
-        }
+            //        inDexOfFile++;
+            //    }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            string[] play = { "play1", "play2" };
-            var subBitmap = ImageScanOpenCV.GetImage("chosenad.PNG");
-            int countX = 0;
-
-            for (int i = 0; i < play.Length; i++)
-            {
-                var handle = AutoControl.FindWindowHandle(null, play[i]);
-                var screen = (Bitmap)CaptureHelper.CaptureWindow(handle);
+            //    //turnOn async
+            //    Thread.Sleep(1000);
+            //    turn_on_async(HWND[0]);
 
 
-                var resPoint1 = ImageScanOpenCV.FindOutPoint(screen, subBitmap);
-                Point point = new Point();
-                if (resPoint1 != null)
-                {
-                    point.X = resPoint1.Value.X + countX;
-                    point.Y = resPoint1.Value.Y;
-                    click_to(point, 400);
+            //    //Play record
+            //    Thread.Sleep(1000);
+            //    play_record(HWND[0], 10000);
 
-                }
-                else
-                {
-                    MessageBox.Show("Khong tim thay");
-                }
-                countX += 490;
-                Thread.Sleep(2000);
-            }
+            //    //turnoff async
+            //    turn_off_async(HWND[0]);
+            //}
+
+            pick_ad(HWND);
         }
     }
 }
