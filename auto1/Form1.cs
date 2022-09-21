@@ -21,10 +21,6 @@ namespace auto1
             InitializeComponent();
         }
 
-        //[DllImport("user32.dll", EntryPoint = "FindWindowEx")]
-        //public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
-        //[DllImport("User32.dll")]
-        //public static extern int SendMessage(IntPtr hWnd, int uMsg, int wParam, string lParam);
 
         void click_to(Point point, int delay)
         {
@@ -54,9 +50,9 @@ namespace auto1
 
             click_to(_threeDotPoint, 800);
             click_to(_displayAsyncPoint, 800);
-            click_to(_selectAllPoint, 800);
+            //click_to(_selectAllPoint, 800);
             click_to(_startPoint, 800);
-            click_to(_loginNowPoint, 800);
+            //click_to(_loginNowPoint, 800);
         }
 
         void play_record(IntPtr HWND, int timePerGame)
@@ -72,8 +68,8 @@ namespace auto1
             click_to(playRecordPoint, 800);
             click_to(exitRecordPoint, 800);
 
-            Thread.Sleep(timePerGame);
-            click_to(_stopPoint, 700);
+            //Thread.Sleep(timePerGame);
+            //click_to(_stopPoint, 700);
         }
 
         void turn_off_async(IntPtr HWND)
@@ -85,14 +81,14 @@ namespace auto1
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\20010844\Desktop\data1.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\20010844\Desktop\register.txt");
             if(lines.Length == 0)
             {
                 MessageBox.Show("File khong co j ca");
                 return;
             }
 
-            var hWnd = AutoControl.FindWindowHandle(null, "LDPlayer");
+            var hWnd = AutoControl.FindWindowHandle(null, "play1");
 
             //var openGamePoint = AutoControl.GetGlobalPoint(hWnd,225, 100);
             var loginPoint = AutoControl.GetGlobalPoint(hWnd, 180, 230);
@@ -104,7 +100,7 @@ namespace auto1
 
             for(int i = 0; i < lines.Length; i++)
             {
-                click_to(loginPoint, 5000);
+                click_to(loginPoint, 4000);
                 click_to(registerPoint, 1000);
 
                 //send username
@@ -185,46 +181,62 @@ namespace auto1
                 _hWnd = AutoControl.FindWindowHandle(null, screens[i]);
                 HWND[i] = _hWnd;
             }
-            //for(int j = 0; j <1; j++)
-            //{
 
-            //    for (int i = 0; i < HWND.Length; i++)
-            //    {
-            //        if (inDexOfFile == lines.Length) continue;
-            //        var loginPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 230);
-            //        var usernamePoint = AutoControl.GetGlobalPoint(HWND[i], 180, 130);
-            //        var passwordPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 160);
+            //turnOn async
+            Thread.Sleep(1000);
+            turn_on_async(HWND[0]);
+            var loginPoint = AutoControl.GetGlobalPoint(HWND[0], 180, 230);
+            click_to(loginPoint, 6000);
 
-            //        click_to(loginPoint, 5000);
-
-            //        //SendMessage username
-            //        click_to(usernamePoint, 1000);
-            //        write_to(lines[inDexOfFile].Split('|')[0].ToString().Trim());
-            //        Thread.Sleep(500);
+            //turnoff async
+            turn_off_async(HWND[0]);
 
 
-            //        //send password
-            //        click_to(passwordPoint, 1000);
-            //        write_to(lines[inDexOfFile].Split('|')[1].ToString().Trim());
-            //        Thread.Sleep(500);
+            for (int j = 0; j < 1; j++)
+            {
 
-            //        inDexOfFile++;
-            //    }
+                for (int i = 0; i < HWND.Length; i++)
+                {
+                    if (inDexOfFile == lines.Length) continue;
+                    var usernamePoint = AutoControl.GetGlobalPoint(HWND[i], 180, 130);
+                    var passwordPoint = AutoControl.GetGlobalPoint(HWND[i], 180, 160);
 
-            //    //turnOn async
-            //    Thread.Sleep(1000);
-            //    turn_on_async(HWND[0]);
+                    //click_to(loginPoint, 5000);
+
+                    //SendMessage username
+                    click_to(usernamePoint, 500);
+                    write_to(lines[inDexOfFile].Split('|')[0].ToString().Trim());
+                    //Thread.Sleep(500);
 
 
-            //    //Play record
-            //    Thread.Sleep(1000);
-            //    play_record(HWND[0], 10000);
+                    //send password
+                    click_to(passwordPoint, 500);
+                    write_to(lines[inDexOfFile].Split('|')[1].ToString().Trim());
+                    //Thread.Sleep(500);
 
-            //    //turnoff async
-            //    turn_off_async(HWND[0]);
-            //}
+                    inDexOfFile++;
+                }
 
-            pick_ad(HWND);
+                //turnOn async
+                Thread.Sleep(1000);
+                turn_on_async(HWND[0]);
+
+                Thread.Sleep(800);
+                var _loginNowPoint = AutoControl.GetGlobalPoint(HWND[0], 180, 210);
+                click_to(_loginNowPoint, 800);
+
+                Thread.Sleep(13000);
+                pick_ad(HWND);
+
+                //    //Play record
+                Thread.Sleep(1000);
+                play_record(HWND[0], 10000);
+
+                //    //turnoff async
+                //    turn_off_async(HWND[0]);
+            }
+
+
         }
     }
 }
