@@ -204,7 +204,7 @@ namespace auto1
             turn_off_async(HWND[0]);
 
 
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < lines.Length/number_of_screen; j++)
             {
 
                 for (int i = 0; i < HWND.Length; i++)
