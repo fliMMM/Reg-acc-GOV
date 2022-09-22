@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -168,13 +169,24 @@ namespace auto1
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        void play_game(string[] lines)
         {
-            //read file
-            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\20010844\Desktop\login.txt");
             int inDexOfFile = 0;
             IntPtr[] HWND = new IntPtr[2];
-            string[] screens = { "play1", "play2" };
+            int number_of_screen = (int)numericUpDown1.Value;
+            if (number_of_screen == 0)
+            {
+                MessageBox.Show("Chua nhap so luong man hinh!!");
+                return;
+            }
+
+            string[] screens = new String[number_of_screen];
+            for (int k = 0; k < number_of_screen; k++)
+            {
+                screens[k] = "play" + (k + 1).ToString();
+                MessageBox.Show(screens[k]);
+            }
+
             IntPtr _hWnd = IntPtr.Zero;
             for (int i = 0; i < screens.Length; i++)
             {
@@ -192,7 +204,7 @@ namespace auto1
             turn_off_async(HWND[0]);
 
 
-            for (int j = 0; j < 1; j++)
+            for (int j = 0; j < 4; j++)
             {
 
                 for (int i = 0; i < HWND.Length; i++)
@@ -206,13 +218,13 @@ namespace auto1
                     //SendMessage username
                     click_to(usernamePoint, 500);
                     write_to(lines[inDexOfFile].Split('|')[0].ToString().Trim());
-                    //Thread.Sleep(500);
+                    Thread.Sleep(1000);
 
 
                     //send password
                     click_to(passwordPoint, 500);
                     write_to(lines[inDexOfFile].Split('|')[1].ToString().Trim());
-                    //Thread.Sleep(500);
+                    Thread.Sleep(1000);
 
                     inDexOfFile++;
                 }
@@ -225,18 +237,51 @@ namespace auto1
                 var _loginNowPoint = AutoControl.GetGlobalPoint(HWND[0], 180, 210);
                 click_to(_loginNowPoint, 800);
 
+                //turnoff async
+                turn_off_async(HWND[0]);
+
                 Thread.Sleep(13000);
                 pick_ad(HWND);
 
-                //    //Play record
+                //turnOn async
+                Thread.Sleep(1000);
+                turn_on_async(HWND[0]);
+
+                //Play record
                 Thread.Sleep(1000);
                 play_record(HWND[0], 10000);
 
                 //    //turnoff async
                 //    turn_off_async(HWND[0]);
             }
+        }
 
-
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string[] lines;
+            Stream myStream = null;
+            OpenFileDialog theDialog = new OpenFileDialog();
+            theDialog.Title = "Open Text File";
+            theDialog.Filter = "TXT files|*.txt";
+            theDialog.InitialDirectory = @"C:\";
+            if (theDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((myStream = theDialog.OpenFile()) != null)
+                    {
+                        using (myStream)
+                        {
+                            lines = File.ReadAllLines(theDialog.FileName);
+                            play_game(lines);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
         }
     }
 }
